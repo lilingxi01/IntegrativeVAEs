@@ -6,7 +6,7 @@ from keras.models import Model
 from models.common import sse, bce, mmd, sampling, kl_regu
 from keras.losses import mean_squared_error,binary_crossentropy
 import numpy as np
-from tensorflow import set_random_seed
+import tensorflow as tf
 
 class XVAE:
     def __init__(self, args):
@@ -17,7 +17,7 @@ class XVAE:
     def build_model(self):
         
         np.random.seed(42)
-        set_random_seed(42)
+        tf.random.set_seed(42)
         # Build the encoder network
         # ------------ Input -----------------
         s1_inp = Input(shape=(self.args.s1_input_size,))
@@ -92,8 +92,8 @@ class XVAE:
         vae_loss = K.mean(reconstruction_loss + self.args.beta * distance)
         self.vae.add_loss(vae_loss)
 
-        adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, amsgrad=False, decay=0.001)
-        self.vae.compile(optimizer=adam, metrics=[mean_squared_error, mean_squared_error])
+        adam = tf.keras.optimizers.Adam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, amsgrad=False, decay=0.001)
+        self.vae.compile(optimizer=adam, metrics=[mean_squared_error])
         self.vae.summary()
 
     def train(self, s1_train, s2_train, s1_test, s2_test):

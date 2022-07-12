@@ -21,7 +21,7 @@ class CNCVAE:
 
     def build_model(self):
         np.random.seed(42)
-        tf.random.set_random_seed(42)
+        tf.random.set_seed(42)
         # Build the encoder network
         # ------------ Input -----------------
         inputs = Input(shape=(self.args.input_size,), name='concat_input')
@@ -76,7 +76,7 @@ class CNCVAE:
         vae_loss = K.mean(reconstruction_loss + self.args.beta * distance)
         self.vae.add_loss(vae_loss)
 
-        adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.001, amsgrad=False)
+        adam = tf.keras.optimizers.Adam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.001, amsgrad=False)
         self.vae.compile(optimizer=adam)
         self.vae.summary()
 
