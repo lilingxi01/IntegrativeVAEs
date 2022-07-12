@@ -2,6 +2,9 @@
 
 __pycache__/
 
+*.npz
+*.pyc
+
 .vscode/
 .idea/
 .nova/
