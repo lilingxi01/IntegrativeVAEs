@@ -5,7 +5,7 @@ from keras.models import Model
 
 from models.common import sse, bce, mmd, sampling, kl_regu
 import numpy as np
-from tensorflow import set_random_seed
+import tensorflow as tf
 from keras.losses import mean_squared_error, binary_crossentropy
 
 
@@ -42,7 +42,7 @@ class HVAE:
 
     def build_s1(self):
         np.random.seed(42)
-        set_random_seed(42)
+        tf.random.set_seed(42)
         # Build the encoder network
         # ------------ Input -----------------
         inp = Input(shape=(self.args.s1_input_size,))
@@ -88,7 +88,7 @@ class HVAE:
      
         vae_loss = K.mean(self.reconstruction_loss + self.args.beta * distance)
         self.vae.add_loss(vae_loss)
-        adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.001, amsgrad=False)
+        adam = tf.keras.optimizers.Adam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.001, amsgrad=False)
         self.vae.compile(optimizer=adam)
         self.vae.summary()
 
@@ -98,7 +98,7 @@ class HVAE:
 
     def build_s2(self):
         np.random.seed(42)
-        set_random_seed(42)
+        tf.random.set_seed(42)
         # Build the encoder network
         # ------------ Input -----------------
         inp = Input(shape=(self.args.s2_input_size,))
@@ -142,14 +142,14 @@ class HVAE:
      
         vae_loss = K.mean(self.reconstruction_loss + self.args.beta * distance)
         self.vae.add_loss(vae_loss)
-        adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.001, amsgrad=False)
+        adam = tf.keras.optimizers.Adam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.001, amsgrad=False)
         self.vae.compile(optimizer=adam)
         self.vae.summary()
 
 
     def build_merged(self):
         np.random.seed(42)
-        set_random_seed(42)
+        tf.random.set_seed(42)
         # Build the encoder network
         # ------------ Input -----------------
         inp = Input(shape=(self.args.ds,))
@@ -193,7 +193,7 @@ class HVAE:
      
         vae_loss = K.mean(self.reconstruction_loss + self.args.beta * distance)
         self.vae.add_loss(vae_loss)
-        adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.001, amsgrad=False)
+        adam = tf.keras.optimizers.Adam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.001, amsgrad=False)
         self.vae.compile(optimizer=adam)
         self.vae.summary()
 
